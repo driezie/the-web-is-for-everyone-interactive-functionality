@@ -1,0 +1,22 @@
+<%- include('./partials/head', 
+  { 
+    // HEAD data
+    title: 'Stories',
+    description: 'Welcome to the stories page',
+    image: ''
+  }) 
+%>
+<div class="container">
+  <h1>
+    Storys
+  </h1>
+  <div class="playlists">
+    <!-- For each loop to load all the stories in this playlist -->
+    <% stories.forEach(item => { %>
+      <!-- Create for each story a component and tries to load this with information -->
+      <%- include('./components/story-card',{item: item}) %>
+    <% }) %>
+  </div>
+</div>
+
+<%- include('./partials/foot') %>

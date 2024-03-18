@@ -1,0 +1,23 @@
+<%- include('./partials/head', 
+  { 
+    // HEAD data
+    title: 'Home',
+    description: 'Welcome to the home page',
+    image: ''
+  }) 
+%>
+<div class="container">
+  <h1>
+    Playlists
+  </h1>
+
+  <div class="card-grid card-grid-3">
+    <% playlist.forEach(item => { %>
+      <%- include('./components/playlist-card',{item: item}) %>
+    <% }) %>
+  </div>
+
+</div>
+
+
+<%- include('./partials/foot') %>

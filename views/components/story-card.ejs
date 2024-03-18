@@ -1,0 +1,23 @@
+<!-- 
+    Available variables:
+    - item: object
+        - title: string
+        - slug: string
+        - image: string
+ -->
+
+<img src="https://fdnd-agency.directus.app/assets/<%= item.image %>" alt="<%= item.title %>">
+<h2><%= item.title %></h2>
+
+<%- include('./partials/buttons', { buttons: 
+[
+    {
+        link: "/" + item.slug,
+        style: {
+            type: "playlist"
+        },
+        text: "PLAY STORY",
+        icon: true,
+    }
+]
+}) %> 

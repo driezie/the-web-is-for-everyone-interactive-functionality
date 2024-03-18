@@ -1,27 +1,18 @@
 {
-  "name": "the-web-is-for-everyone-interactive-functionality",
+  "name": "server-side-rendering",
   "version": "1.0.0",
-  "description": "Ontwerp en maak voor een opdrachtgever een interactieve toepassing die voor iedereen toegankelijk is.",
-  "main": "server.js",
-  "type": "module",
-  "directories": {
-    "doc": "docs"
-  },
+  "description": "Loading data from API and rendering it on the server side using EJS and Express",
+  "main": "app.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "vercel dev"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/fdnd-task/the-web-is-for-everyone-interactive-functionality.git"
-  },
-  "author": "J.P. Sturkenboom <j.p.sturkenboom@hva.nl>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/fdnd-task/the-web-is-for-everyone-interactive-functionality/issues"
-  },
-  "homepage": "https://github.com/fdnd-task/the-web-is-for-everyone-interactive-functionality#readme",
+  "author": "Driezie",
+  "license": "ISC",
   "dependencies": {
     "ejs": "^3.1.9",
-    "express": "^4.18.2"
+    "express": "^4.18.3",
+    "node-fetch": "^2.7.0",
+    "socket.io": "^4.7.4",
+    "vercel": "^33.5.5"
   }
 }

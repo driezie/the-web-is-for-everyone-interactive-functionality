@@ -1,0 +1,29 @@
+<!-- 
+    Available variables:
+    - item: object
+        - title: string
+        - slug: string
+        - image: string
+ -->
+<div class="card card-playlist">
+    <img class="logo" src="https://fdnd-agency.directus.app/assets/<%= item.image %>" alt="<%= item.title %>">
+    <div class="text-content">
+        <div class="title-content">
+            <h3><%= item.title %></h3>
+        </div>
+        <div class="actions">
+            <a href="<%= item.slug %>" class="play">
+                <img src="/svg/play-orange.svg" alt="play button">
+                <span>
+                    <!-- Dit moet ik nog veranderen naar de tijd -->
+                    <%= item.stories.length %> stories
+                </span>
+            </a>
+            <div class="additional-actions">
+                <a href="">
+                <img src="/svg/heart.svg" alt="cloud save">
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

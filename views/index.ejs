@@ -1,0 +1,92 @@
+<%- include('./partials/head', 
+  { 
+    // HEAD data
+    title: 'Home',
+    description: 'Welcome to the home page',
+    image: ''
+  }) 
+%>
+
+<div class="container">
+  <!-- <div class="left-side">
+    <img src="https://via.placeholder.com/150" alt="profile picture">
+    <h2>Driezie</h2>
+    <p>Joined: 2020</p>
+  </div> -->
+  <div class="dashboard">
+    <h1>
+      Lessons
+    </h1>
+
+    <div class="buttons">
+        
+      <a href="/" class="button lesson">
+        <span>1.</span>
+        <span>Listening</span>   
+        <img src="/svg/music-note.svg" alt="">
+      </a>
+      
+      <a href="/" class="button lesson">
+        <span>2.</span>
+        <span>Locked</span>   
+        <img src="/svg/lock.svg" alt="">
+      </a>
+</div>
+    
+    <div class="playlists">
+      <h2>Owned playlists</h2>
+    </div>
+  
+    <div class="stories">
+      All stories
+
+      <div class="tags">
+        <div class="tag-content">
+          <span>Listening</span>
+          <span>Reading</span>
+          <span>Writing</span>
+          <span>Speaking</span>
+        </div>
+        <a href="">Show all</a>
+      </div>
+
+      <div class="card-story long-card">
+        <img class="logo" src="https://via.placeholder.com/160x164" alt="">
+        <div class="text-content">
+          <div class="title-content">
+            <h3>The dinosaur family</h3>
+            <img class="language" src="https://via.placeholder.com/16x12" alt="">
+          </div>
+          <p>
+            Long ago there was a family of dinos that lived in a desered place. The little dino is making a new friend
+          </p>
+
+          <div class="actions">
+            <div class="play">
+              <img src="/svg/play.svg" alt="play button">
+              <span>3 min. 5 sec</span>
+            </div>
+            <div class="additional-actions">
+              <a href="">
+                <img src="/svg/cloud-save.svg" alt="save">
+              </a>
+              <a href="">
+                <img src="/svg/local-save.svg" alt="play button">
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="right-side">
+
+  </div>
+
+  
+
+</div>
+
+
+<%- include('./partials/foot') %>

@@ -1,0 +1,30 @@
+<!-- 
+    Docs:
+
+    This partial is used to create buttons. You can use the extra fields:
+    - link: the link to the button
+    - style: the style of the button
+    - text: the text of the button
+    - icon (toggle): whether or not to show an icon
+    - custom (optional): a custom class for the button, it removes the default icon and adds the custom class
+    - link_type (optional): the target of the link (e.g. _blank)
+
+ -->
+
+<% if (buttons) { %>
+    <div class="buttons">
+        <% for (let i = 0; i < buttons.length; i++) { %>
+            <a href="<%= buttons[i].link %>" class="button <%= buttons[i].style && buttons[i].style.type ? buttons[i].style.type : '' %>" <% if (buttons[i].style && buttons[i].style.link_type) { %> target="<%= buttons[i].style.link_type %>" <% } %>>
+                <span><%= buttons[i].text %></span>
+                <% if (buttons[i].style && buttons[i].style.custom) { %>
+                    <i class="<%= buttons[i].style.custom %>"></i>
+                <% } else { %>
+                    <% if (buttons[i].icon) { %>
+                        <i class="fa-solid fa-arrow-<%= buttons[i].style && buttons[i].style.arrow ? buttons[i].style.arrow : 'right' %>"></i>
+                    <% } %>
+                <% } %>
+            </a>
+            <% //console.log("Created: Button '" + buttons[i].text + "' has the following properties: " +  JSON.stringify(buttons[i])) %>
+        <% } %>
+    </div>
+<% } %>

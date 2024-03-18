@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/style/style.css">
+    <script src="/js/main.js" defer></script>
+
+    <title><% if (title) { %><%= title %> | Door Jelte<% } %></title>
+    <meta content="<% if (description) { %><%= description %><% } %>" name="description">
+    <meta property="og:title" content="">
+    <meta property="og:site_name" content="<% if (title) { %><%= title %> | Door Jelte<% } %>">
+    <meta property="og:description" content="<% if (description) { %><%= description %><% } %>">
+    <meta property="og:image" content="<% if (title) { %><%= title %> | Door Jelte<% } %>">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="icon" type="image" href="<% if (image) { %><%= image %><% } %>">
+
+    <script src="https://kit.fontawesome.com/b1b2df5e00.js" crossorigin="anonymous" defer></script>
+</head>
+  <body>
+    <%- include('./nav') %>
