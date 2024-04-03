@@ -58,19 +58,30 @@ loadLikes().then(data => {
 app.get('/', async (request, response) => {
   try {
     const API = `${apiUrl}/tm_playlist`;
-
-    // Fetch all playlists
     const allPlaylistsResponse = await fetch(API);
     const allPlaylists = await allPlaylistsResponse.json();
 
-    // use loadLikes()
-    const likedPlaylistIds = likes;
+    let likedPlaylistIds = likes;
 
-    
+
+    // Oplossing 1
+    // const stringifiedLikedPlaylistIds = likedPlaylistIds.map(id => `"${id}"`);
+    // {"slug":{"_in":["christmas-stories","stories-about-food"]}}
+    // const fetchLikedAPI =  `${apiUrl}/tm_playlist?filter={"slug":{"_in":[${stringifiedLikedPlaylistIds.join(",")}]}}&fields=title,image,description,slug,stories.tm_story_id.title,stories.tm_story_id.summary,stories.tm_story_id.image,stories.tm_story_id.slug,language_id.language,language_id.flag.id`;
+
+    // Oplossing 2
+    // ?filter[slug][_in]=1,2
+    const fetchLikedAPI =  `${apiUrl}/tm_playlist?filter[slug][_in]=${likedPlaylistIds.join(",")}&fields=title,image,description,slug,stories.tm_story_id.title,stories.tm_story_id.summary,stories.tm_story_id.image,stories.tm_story_id.slug,language_id.language,language_id.flag.id`;
+    const [fetchLikedData] = await Promise.all([
+      fetch(fetchLikedAPI).then(res => res.json()),
+    ]);
+
+    console.log(fetchLikedAPI);
+    console.log(fetchLikedData.data);
 
     response.render('index', {
       playlist: allPlaylists.data,
-      liked: [],
+      liked: fetchLikedData.data,
     });
 
   } catch (error) {
@@ -78,7 +89,6 @@ app.get('/', async (request, response) => {
     response.status(500).send("Internal Server Error");
   }
 });
-
 
 
 
@@ -148,7 +158,23 @@ app.post('/like', async (req, res) => {
       // Save liked items to file
       await saveLikes();
 
-      res.status(200).json({ message: 'Item liked successfully' });
+      const API = `${apiUrl}/tm_playlist`;
+      const allPlaylistsResponse = await fetch(API);
+      const allPlaylists = await allPlaylistsResponse.json();
+
+      let likedPlaylistIds = likes;
+
+      // ?filter[slug][_in]=1,2
+      const fetchLikedAPI =  `${apiUrl}/tm_playlist?filter[slug][_in]=${likedPlaylistIds.join(",")}&fields=title,image,description,slug,stories.tm_story_id.title,stories.tm_story_id.summary,stories.tm_story_id.image,stories.tm_story_id.slug,language_id.language,language_id.flag.id`;
+      const [fetchLikedData] = await Promise.all([
+        fetch(fetchLikedAPI).then(res => res.json()),
+      ]);
+      
+      res.render('index', {
+        playlist: allPlaylists.data,
+        liked: fetchLikedData.data,
+      });
+
   } catch (error) {
       console.error('Error occurred:', error);
       res.status(500).json({ error: 'Internal server error' });

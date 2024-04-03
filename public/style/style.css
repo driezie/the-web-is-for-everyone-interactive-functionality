@@ -49,6 +49,57 @@ a {
   width: 50rem;
 }
 
+.carousel {
+  position: relative;
+}
+
+.card-grid.carousel-container {
+  display: flex;
+  overflow: auto;	
+  scroll-snap-type: x mandatory;
+  /* scrollbar-width: none; */
+}
+
+.carousel .card {
+  scroll-snap-align: center;
+  width: 15rem;
+  flex-basis: 15vw 0 0;
+  flex-shrink: 0;
+}
+
+.carousel-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  gap: 20px;
+  width: 100%;
+}
+
+/* style scrollbar */
+
+
+.carousel ::-webkit-scrollbar {
+  /* top padding */
+  width: 20px;
+}
+
+/* Track */
+.carousel ::-webkit-scrollbar-track {
+  background-color: #ececec7a;
+}
+ 
+/* Handle */
+.carousel ::-webkit-scrollbar-thumb {
+  background: #139943; 
+  /* border-radius: 10px; */
+}
+
+/* Handle on hover */
+.carousel ::-webkit-scrollbar-thumb:hover {
+  background: #0e7130
+}
+
 .card-grid-1 {
     grid-template-columns: repeat(1, 1fr);
 }
@@ -148,6 +199,11 @@ a {
             height: 20px;
           }
         }
+
+        button {
+          border: none;
+          background: transparent;
+        }
       }
     }
   }
@@ -163,6 +219,7 @@ a {
       img.logo {
         max-width: 160px;
       }
+
     }
 
     
