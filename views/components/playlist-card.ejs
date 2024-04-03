@@ -13,16 +13,21 @@
         </div>
         <div class="actions">
             <a href="<%= item.slug %>" class="play">
-                <img src="/svg/play-orange.svg" alt="play button">
+                <img src="svg/svg/play-orange." alt="play button">
                 <span>
                     <!-- Dit moet ik nog veranderen naar de tijd -->
                     <%= item.stories.length %> stories
                 </span>
             </a>
             <div class="additional-actions">
-                <a href="">
-                <img src="/svg/heart.svg" alt="cloud save">
-                </a>
+                <form action="/like" method="POST">
+                    <!-- Include a hidden input field for itemId -->
+                    <input type="hidden" name="itemId" value="<%= item.id %>">
+                    <!-- Heart button to submit the form -->
+                    <button type="submit">
+                        <img src="/svg/heart.svg" alt="heart icon">
+                    </button>
+                </form>
             </div>
         </div>
     </div>

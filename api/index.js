@@ -1,14 +1,9 @@
-/*
-  Dit is de server van de applicatie.
-  Hier worden alle routes gedefinieerd en
-  wordt de server opgestart.
-*/
-
 import { createServer } from "http";
 import express from "express";
 import { Server as SocketIOServer } from "socket.io";
 import path from "path";
 import fetch from "node-fetch";
+import fs from "fs/promises";
 
 const httpServer = createServer();
 const io = new SocketIOServer(httpServer);
@@ -19,43 +14,63 @@ app.set('views', path.join(__dirname, '../views'));
 
 const apiUrl = "https://fdnd-agency.directus.app/items";
 
-/* 
-  Hier worden de arrays die uit direcus komen 
-  geconverteerd. Hij haalt hierbij de .data 
-  weg uit de array en geeft de data terug.
-*/
+// File to store liked items
+const likesFile = path.join(__dirname, 'liked-items.json');
+
+
+// Function to save liked items to file
+async function saveLikes() {
+  try {
+    await fs.writeFile(likesFile, JSON.stringify(likes));
+  } catch (error) {
+    console.error("Error saving liked items:", error);
+  }
+}
+
 function dataConverter(request) {
-  console.log("Data succesvol geconverteerd: ", request.data)
+  console.log("Data successfully converted: ", request.data)
   return request.data;
 }
 
-/*
-  Door deze functie krijgt de favicon.ico een 
-  "No content" error. Dit is goed omdat deze 
-  issue bij mij soms opeens in de slug staat.
-*/
-
+// Ignore favicon.ico request
 app.get('/favicon.ico', (req, res) => {
   res.status(204);
 });
 
-// Lessons page
+// Load liked items from file on server startup
+async function loadLikes() {
+  try {
+    const data = await fs.readFile(likesFile);
+    return JSON.parse(data);
+  } catch (error) {
+    // If file doesn't exist or error reading, return empty array
+    return [];
+  }
+}
+
+let likes = [];
+loadLikes().then(data => {
+  likes = data;
+  console.log('Liked items:', likes);
+});
+
+// Render the homepage with playlists and liked items
 app.get('/', async (request, response) => {
   try {
-    const [playlistData, storiesData] = await Promise.all([
-      fetch(apiUrl + '/tm_playlist').then(res => res.json()),
-      fetch(apiUrl + '/tm_story').then(res => res.json()),
-    ]);
+    const API = `${apiUrl}/tm_playlist`;
 
-    // Haalt de .data uit de 2 arrays
-    const dataFinalPlaylist = dataConverter(playlistData)
-    const dataFinalStories = dataConverter(storiesData)
+    // Fetch all playlists
+    const allPlaylistsResponse = await fetch(API);
+    const allPlaylists = await allPlaylistsResponse.json();
 
+    // use loadLikes()
+    const likedPlaylistIds = likes;
+
+    
 
     response.render('index', {
-      // Nog mee bezig, wil eerst zonder data de layout mooi maken
-      // playlist: dataFinalPlaylist,
-      // stories: dataFinalStories,
+      playlist: allPlaylists.data,
+      liked: [],
     });
 
   } catch (error) {
@@ -64,43 +79,35 @@ app.get('/', async (request, response) => {
   }
 });
 
-// Lijst met Playlists
+
+
+
+
+// Render playlists
 app.get('/playlists', async (request, response) => {
   try {
     const API =  `${apiUrl}/tm_playlist`;
-    console.log("Api link aangemaakt: " ,API);
-
     const [data] = await Promise.all([
       fetch(API).then(res => res.json()),
     ]);
-
-    // Haalt de .data uit de array
-    const dataFinal = dataConverter(data)
-
+    const dataFinal = dataConverter(data);
     response.render('playlists', {
       playlist: dataFinal,
     });
-
   } catch (error) {
     console.error(error);
     response.status(500).send("Internal Server Error");
   }
 });
 
-// Lijst met stories uit de gekozen playlist
+// Render playlist based on slug
 app.get('/:slug', async (request, response) => {
   try {
     const API = `${apiUrl}/tm_playlist?filter={"slug":"${request.params.slug}"}&fields=title,description,slug,stories.tm_story_id.title,stories.tm_story_id.summary,stories.tm_story_id.image,stories.tm_story_id.slug,language_id.language,language_id.flag.id`;
-    console.log("Api link aangemaakt: " ,API);
-
     const [data] = await Promise.all([
       fetch(API).then(res => res.json()),
     ]);
-
-    // Haalt de .data uit de array
-    const dataFinal = dataConverter(data)
-
-    // Laad de playlist pagina met de data
+    const dataFinal = dataConverter(data);
     response.render('playlist', {
       playlist: dataFinal[0],
       stories: dataFinal[0].stories || [],
@@ -110,23 +117,16 @@ app.get('/:slug', async (request, response) => {
     console.error(error);
     response.status(500).send("Internal Server Error");
   }
-
 });
 
-// Stories pagina waarin alle storie informatie staat
+// Render story based on playlist and story slug
 app.get('/:playlistSlug/:storySlug', async (request, response) => {
   try {
     const API = `${apiUrl}/tm_story?filter={"slug":"${request.params.storySlug}"}&fields=title,description,slug,image,video,playlist.tm_playlist_id.title,playlist.tm_playlist_id.slug, playlist.tm_playlist_id.description,`;
-    console.log("Api link aangemaakt: " ,API);
-
     const [data] = await Promise.all([
       fetch(API).then(res => res.json()),
     ]);
-
-    // Haalt de .data uit de array
-    const dataFinal = dataConverter(data)
-
-    // Laad de story pagina met de data
+    const dataFinal = dataConverter(data);
     response.render('story', {
       story: dataFinal[0],
     });
@@ -136,10 +136,24 @@ app.get('/:playlistSlug/:storySlug', async (request, response) => {
   }
 });
 
-/* 
-  Hier niet aanzitten. Dit zorgt er allemaal 
-  voor dat de server kan werken met Vercel issues
-*/
+// Like endpoint to store liked item IDs
+app.post('/like', async (req, res) => {
+  try {
+      const { itemId } = req.body;
+      console.log(req.body);
+      console.log('Item liked:', itemId);
+      // Store liked item ID
+      likes.push(itemId);
+      console.log('Liked items:', likes);
+      // Save liked items to file
+      await saveLikes();
+
+      res.status(200).json({ message: 'Item liked successfully' });
+  } catch (error) {
+      console.error('Error occurred:', error);
+      res.status(500).json({ error: 'Internal server error' });
+  }
+});
 
 const port = process.env.PORT || 8080;
 
@@ -155,10 +169,7 @@ io.on("connection", (socket) => {
   });
 });
 
-/*
-  Checkt of er een error is, als er een error 
-  EADDRINUSE is probeert hij een andere port
-*/
+// Handle server error
 httpServer.on("error", (e) => {
   if (e.code === "EADDRINUSE") {
     const address = httpServer.address();
@@ -175,5 +186,5 @@ httpServer.on("error", (e) => {
   }
 });
 
-// Exporteer de app
+// Export the app
 module.exports = app;

@@ -35,6 +35,18 @@
     
     <div class="playlists">
       <h2>Owned playlists</h2>
+      <div class="card-grid card-grid-3">
+        <% playlist.forEach(item => { %>
+          <%- include('./components/playlist-card',{item: item}) %>
+        <% }) %>
+      </div>
+
+      <h2>Liked playlists</h2>
+      <div class="card-grid card-grid-3">
+        <% liked.forEach(item => { %>
+          <%- include('./components/playlist-card',{item: item}) %>
+        <% }) %>
+      </div>
     </div>
   
     <div class="stories">

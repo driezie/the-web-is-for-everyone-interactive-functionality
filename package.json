@@ -1,18 +1,19 @@
 {
-  "name": "server-side-rendering",
+  "name": "fdnd-node",
   "version": "1.0.0",
-  "description": "Loading data from API and rendering it on the server side using EJS and Express",
+  "description": "Node example",
   "main": "app.js",
   "scripts": {
     "start": "vercel dev"
   },
-  "author": "Driezie",
+  "author": "Daan Korver",
   "license": "ISC",
   "dependencies": {
     "ejs": "^3.1.9",
     "express": "^4.18.3",
-    "node-fetch": "^2.7.0",
+    "express-markdown-browser": "^0.0.2",
+    "markdown-it": "^14.0.0",
     "socket.io": "^4.7.4",
-    "vercel": "^33.5.5"
+    "vercel": "^33.6.1"
   }
 }
